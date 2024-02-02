@@ -33,6 +33,8 @@ private:
 
     std::vector<Texture2D> loadTextures(aiMesh* mesh, const aiScene* scene);
 
+    u_int LoadTexture(const std::string& path);
+
 private:
     std::vector<Mesh> m_meshes;
     std::vector<Texture2D> m_texturesLoaded;

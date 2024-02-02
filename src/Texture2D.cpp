@@ -17,6 +17,11 @@ void Texture2D::Bind() const
     glBindTexture(GL_TEXTURE_2D, ID);
 }
 
+void Texture2D::UnBind()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Texture2D::DeActivate()
 {
     glActiveTexture(GL_TEXTURE0);
@@ -25,6 +30,16 @@ void Texture2D::DeActivate()
 void Texture2D::Activate(int idx)
 {
     glActiveTexture(GL_TEXTURE0 + idx);
+}
+
+void Texture2D::Enable()
+{
+    glEnable(GL_TEXTURE_2D);
+}
+
+void Texture2D::Disable()
+{
+    glDisable(GL_TEXTURE_2D);
 }
 
 void Texture2D::SetParameterInt(GLenum name, GLint param)
@@ -52,7 +67,6 @@ void Texture2D::BindImage(u_int& textureID)
     int width, height, channels;
 
     u_char* data = stbi_load(m_path.c_str(), &width, &height, &channels, 0);
-    stbi_set_flip_vertically_on_load(true);
 
     if (data)
     {

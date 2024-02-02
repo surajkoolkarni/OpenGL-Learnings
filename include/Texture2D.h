@@ -10,6 +10,8 @@
 class Texture2D
 {
 public:
+    Texture2D() = default;
+
     Texture2D(const std::string& fileName, const std::string& type = "");
 
     Texture2D(const Texture2D&) = default;
@@ -20,9 +22,15 @@ public:
 
     void Bind() const;
 
+    static void UnBind();
+
     static void DeActivate();
 
     static void Activate(int idx);
+
+    static void Enable();
+
+    static void Disable();
 
     void SetParameterInt(GLenum name, GLint param);
 
@@ -37,10 +45,9 @@ private:
 
     uint LoadTexture();
 
-public:    
-    unsigned int ID;
-
-private:
+public:
     std::string m_path;
     std::string m_type;
+
+    unsigned int ID;
 };

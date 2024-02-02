@@ -261,7 +261,7 @@ int main()
             lightVAO.DrawVertexArrays(36);
         }
 
-        tex.Activate();
+        tex.Activate(0);
         tex.Bind();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

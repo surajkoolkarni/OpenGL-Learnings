@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "GLWindow.h"
 #include "Model.h"
+#include "GLWindow.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

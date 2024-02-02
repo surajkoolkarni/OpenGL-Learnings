@@ -60,10 +60,6 @@ lib:BufferFactory Camera ElementBuffer GLWindow IBuffer Mesh Model Shader StbIma
 	g++ -shared -fPIC $(OPT) BufferFactory.o Camera.o ElementBuffer.o GLWindow.o IBuffer.o Mesh.o \
 	 	Model.o Shader.o StbImage.o Texture2D.o Vertex.o VertexArray.o VertexBuffer.o -L. -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -o libModel.so
 
-# lib:BufferFactory Camera ElementBuffer GLWindow IBuffer Model Shader StbImage Texture2D Vertex VertexArray VertexBuffer
-# 	g++ -shared -fPIC $(OPT) BufferFactory.o Camera.o ElementBuffer.o GLWindow.o IBuffer.o \
-# 	 	Model.o Shader.o StbImage.o Texture2D.o Vertex.o VertexArray.o VertexBuffer.o -L. -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -o libModel.so
-
 BufferFactory:$(SRC)/BufferFactory.cpp
 	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/BufferFactory.cpp
 

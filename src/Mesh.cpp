@@ -32,6 +32,10 @@ void Mesh::Draw(std::shared_ptr<Shader> shader) const
     {
         Texture2D::Activate(i);
         
+        m_textures[i].Bind();
+
+        Texture2D::Enable();
+
         std::string number;
         std::string name = m_textures[i].Type();
 
@@ -46,20 +50,21 @@ void Mesh::Draw(std::shared_ptr<Shader> shader) const
 
         shader->setInt(name + number, i);
 
-        m_textures[i].Bind();
+        Texture2D::Disable();
     }
 
     m_VAO->Bind();
     m_VAO->DrawElements(m_indices.size());
     m_VAO->UnBind();
 
+    Texture2D::UnBind();
     Texture2D::DeActivate();
 }
 
 void Mesh::Delete() const
 {
-    m_VBO->Delete();
     m_EBO->Delete();
+    m_VBO->Delete();
     m_VAO->Delete();
 }
 
@@ -74,6 +79,8 @@ void Mesh::setupMesh()
     m_EBO->CopyIndices(m_indices);
 
     setAttributes();
+
+    m_VAO->UnBind();
 }
 
 void Mesh::setAttributes()
@@ -99,6 +106,4 @@ void Mesh::setAttributes()
     // weights
     glEnableVertexAttribArray(6);
     glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Weights));
-    
-    m_VAO->UnBind();
 }

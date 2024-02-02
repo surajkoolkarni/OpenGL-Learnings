@@ -1,5 +1,7 @@
 #include "GLWindow.h"
 
+#include "stb_image.h"
+
 #include <iostream>
 
 namespace
@@ -76,6 +78,8 @@ void GLWindow::CreateWindow(int width, int height, const std::string& title)
 
     glfwMakeContextCurrent(m_window);
     glfwSetFramebufferSizeCallback(m_window, frameBufferSizeCB);
+
+    stbi_set_flip_vertically_on_load(true);
 }
 
 void GLWindow::SetCamera(float x, float y, float z)
