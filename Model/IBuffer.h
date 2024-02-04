@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 
 
-class MODEL_API IBuffer
+class IBuffer
 {
 public:
     virtual void Copy(const void* buf, unsigned int size) = 0;

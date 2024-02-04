@@ -8,7 +8,7 @@
 #include <string>
 
 
-class MODEL_API Texture2D
+class Texture2D
 {
 public:
     Texture2D() = default;

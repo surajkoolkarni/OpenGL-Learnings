@@ -5,7 +5,7 @@
 
 #include <vector>
 
-class MODEL_API ElementBuffer final : public IBuffer
+class ElementBuffer final : public IBuffer
 {
 public:
     ElementBuffer();

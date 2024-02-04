@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 
 
-class MODEL_API VertexArray
+class VertexArray
 {
 public:
     VertexArray();

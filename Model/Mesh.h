@@ -15,7 +15,7 @@
 #include <vector>
 
 
-class MODEL_API Mesh
+class Mesh
 {
 public:
     Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture2D>& textures);

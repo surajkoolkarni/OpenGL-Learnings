@@ -1,0 +1,11 @@
+*.o
+*.i
+*.so
+*.exe
+*.dll
+*.a
+**/x64
+build
+packages
+.vscode
+.vs

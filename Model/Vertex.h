@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-struct MODEL_API Vertex
+struct Vertex
 {
     glm::vec3 Position;
     glm::vec3 Normal;
