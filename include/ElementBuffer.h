@@ -1,10 +1,11 @@
 #pragma once
 
+#include "DllExport.h"
 #include "IBuffer.h"
 
 #include <vector>
 
-class ElementBuffer final : public IBuffer
+class MODEL_API ElementBuffer final : public IBuffer
 {
 public:
     ElementBuffer();

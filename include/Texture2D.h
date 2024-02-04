@@ -1,13 +1,14 @@
 #pragma once
 
-#include "StbImage.h"
+#include "DllExport.h"
 
 #include <glad/glad.h>
 
 #include <memory>
+#include <string>
 
 
-class Texture2D
+class MODEL_API Texture2D
 {
 public:
     Texture2D() = default;
@@ -41,9 +42,9 @@ public:
     std::string Path() const;
 
 private:
-    void BindImage(u_int& textureID);
+    void BindImage(unsigned int& textureID);
 
-    uint LoadTexture();
+    unsigned int LoadTexture();
 
 public:
     std::string m_path;

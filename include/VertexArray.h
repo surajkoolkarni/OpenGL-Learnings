@@ -1,9 +1,11 @@
 #pragma once
 
+#include "DllExport.h"
+
 #include <glad/glad.h>
 
 
-class VertexArray
+class MODEL_API VertexArray
 {
 public:
     VertexArray();

@@ -1,11 +1,13 @@
 #pragma once
 
+#include "DllExport.h"
 #include "Camera.h"
 
 #include <GLFW/glfw3.h>
 
 #include <functional>
 #include <memory>
+#include <string>
 
 namespace
 {
@@ -14,7 +16,7 @@ void frameBufferSizeCB(GLFWwindow* window, int width, int height);
 
 }
 
-class GLWindow
+class MODEL_API GLWindow
 {
 public:
     static GLWindow& GetInstance();

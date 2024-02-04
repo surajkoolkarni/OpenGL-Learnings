@@ -1,12 +1,13 @@
 #pragma once
 
+#include "DllExport.h"
 #include "IBuffer.h"
 
 #include <memory>
 #include <string>
 
 
-class BufferFactory
+class MODEL_API BufferFactory
 {
 public:
     BufferFactory() = delete;

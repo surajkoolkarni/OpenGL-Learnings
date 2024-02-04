@@ -1,10 +1,8 @@
 #include "Shader.h"
 #include "GLWindow.h"
 #include "Model.h"
-#include "GLWindow.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

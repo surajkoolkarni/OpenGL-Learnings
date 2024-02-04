@@ -7,14 +7,18 @@
 #include <string>
 
 
-class Model
+class MODEL_API Model
 {
 public:
     Model(const std::string& path);
 
-    void Draw(std::shared_ptr<Shader> shader);
+    Model(const Model&) = delete;
+    Model(Model&&) = default;
 
-    ~Model() = default;
+    Model& operator=(const Model&) = delete;
+    Model& operator=(Model&&) = default;
+
+    void Draw(std::shared_ptr<Shader> shader);
 
     void CleanUp() const;
 
@@ -33,7 +37,7 @@ private:
 
     std::vector<Texture2D> loadTextures(aiMesh* mesh, const aiScene* scene);
 
-    u_int LoadTexture(const std::string& path);
+    unsigned int LoadTexture(const std::string& path);
 
 private:
     std::vector<Mesh> m_meshes;

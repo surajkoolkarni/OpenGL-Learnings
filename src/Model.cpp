@@ -45,7 +45,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
     for (size_t i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        m_meshes.push_back(processMesh(mesh, scene));
+        m_meshes.emplace_back(processMesh(mesh, scene));
     }
 
     for (size_t i = 0; i < node->mNumChildren; ++i)
@@ -59,14 +59,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(loadVertices(mesh), loadIndices(mesh), loadTextures(mesh, scene));
 }
 
-u_int Model::LoadTexture(const std::string& path)
+unsigned int Model::LoadTexture(const std::string& path)
 {
-    uint texture;
+    unsigned int texture;
     glGenTextures(1, &texture); 
 
     int width, height, channels;
 
-    u_char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+    unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
     stbi_set_flip_vertically_on_load(true);
 
     if (data)

@@ -6,7 +6,7 @@
 #include <vector>
 
 
-class VertexBuffer final : public IBuffer
+class MODEL_API VertexBuffer final : public IBuffer
 {
 public:
     VertexBuffer();

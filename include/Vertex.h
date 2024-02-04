@@ -1,8 +1,10 @@
 #pragma once
 
+#include "DllExport.h"
+
 #include <glm/glm.hpp>
 
-struct Vertex
+struct MODEL_API Vertex
 {
     glm::vec3 Position;
     glm::vec3 Normal;

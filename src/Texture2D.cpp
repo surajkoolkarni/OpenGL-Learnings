@@ -62,11 +62,11 @@ std::string Texture2D::Path() const
     return m_path;
 }
 
-void Texture2D::BindImage(u_int& textureID)
+void Texture2D::BindImage(unsigned int& textureID)
 {
     int width, height, channels;
 
-    u_char* data = stbi_load(m_path.c_str(), &width, &height, &channels, 0);
+    unsigned char* data = stbi_load(m_path.c_str(), &width, &height, &channels, 0);
 
     if (data)
     {
@@ -95,9 +95,9 @@ void Texture2D::BindImage(u_int& textureID)
     }
 }
 
-uint Texture2D::LoadTexture()
+unsigned int Texture2D::LoadTexture()
 {
-    uint texture;
+    unsigned int texture;
     glGenTextures(1, &texture); 
     BindImage(texture);
     return texture;

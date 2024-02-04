@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DllExport.h"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,7 +26,7 @@ const float ZOOM        =  45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
-class Camera
+class MODEL_API Camera
 {
 public:
     // camera Attributes

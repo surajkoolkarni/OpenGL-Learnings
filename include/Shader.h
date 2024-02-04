@@ -1,11 +1,13 @@
 #pragma once
 
+#include "DllExport.h"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
 #include <string>
 
-class Shader
+class MODEL_API Shader
 {
 public:
     unsigned int ID;

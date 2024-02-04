@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DllExport.h"
 #include "Vertex.h"
 #include "Texture2D.h"
 
@@ -14,7 +15,7 @@
 #include <vector>
 
 
-class Mesh
+class MODEL_API Mesh
 {
 public:
     Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture2D>& textures);
@@ -22,9 +23,10 @@ public:
     Mesh(const Mesh&) = delete;
     Mesh(Mesh&&) = default;
 
-    void Draw(std::shared_ptr<Shader> shader) const;
+    Mesh& operator=(const Mesh& mesh) = delete;
+    Mesh& operator=(Mesh&& mesh) = default;
 
-    ~Mesh() = default;
+    void Draw(std::shared_ptr<Shader> shader) const;
 
     void Delete() const;
 

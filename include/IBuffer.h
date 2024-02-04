@@ -1,11 +1,12 @@
 #pragma once
 
+#include "DllExport.h"
 #include "Vertex.h"
 
 #include <glad/glad.h>
 
 
-class IBuffer
+class MODEL_API IBuffer
 {
 public:
     virtual void Copy(const void* buf, unsigned int size) = 0;
