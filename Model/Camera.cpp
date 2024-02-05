@@ -83,8 +83,8 @@ void Camera::ProcessMouseScroll(float yoffset)
     
     if (Zoom < 0.05f)
         Zoom = 0.05f;
-    if (Zoom > 45.0f)
-        Zoom = 45.0f;
+    if (Zoom > 90.0f)
+        Zoom = 90.0f;
 }
 
 // calculates the front vector from the Camera's (updated) Euler Angles

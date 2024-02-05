@@ -19,6 +19,8 @@ void frameBufferSizeCB(GLFWwindow* window, int width, int height);
 class MODEL_API GLWindow
 {
 public:
+    ~GLWindow();
+
     static GLWindow& GetInstance();
 
     void CreateWindow(int width, int height, const std::string& title);
@@ -45,7 +47,6 @@ public:
 
     void EnableWireFrame();
 
-    void Terminate();
 
     int Height() const;
 

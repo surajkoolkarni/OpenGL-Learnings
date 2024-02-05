@@ -11,11 +11,11 @@ class IBuffer
 public:
     virtual void Copy(const void* buf, unsigned int size) = 0;
 
-    virtual void Delete();
-
     virtual void Bind() const;
 
-    virtual ~IBuffer() = default;
+    virtual void UnBind() const;
+
+    virtual ~IBuffer();
 
 protected:
     IBuffer(GLenum target);

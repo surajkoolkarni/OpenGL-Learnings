@@ -5,10 +5,12 @@
 #include <glad/glad.h>
 
 
-class VertexArray
+class MODEL_API VertexArray
 {
 public:
     VertexArray();
+
+    ~VertexArray();
 
     void Bind() const;
 
@@ -17,8 +19,6 @@ public:
     void DrawVertexArrays(unsigned int count);
 
     void DrawElements(unsigned int count);
-
-    void Delete() const;
 
     void SetVertexAttributes(int idx, unsigned int size, unsigned int stride, unsigned int offset);
 

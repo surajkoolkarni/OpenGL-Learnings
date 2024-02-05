@@ -58,6 +58,11 @@ auto processKeyboardInput = [](GLFWwindow* window) {
 
 }
 
+GLWindow::~GLWindow()
+{
+    glfwTerminate();
+}
+
 GLWindow& GLWindow::GetInstance()
 {
     static GLWindow instance;
@@ -138,11 +143,6 @@ void GLWindow::EnableDepthTest()
 void GLWindow::EnableWireFrame()
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-}
-
-void GLWindow::Terminate()
-{
-    glfwTerminate();
 }
 
 int GLWindow::Height() const

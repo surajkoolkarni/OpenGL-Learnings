@@ -107,10 +107,5 @@ int main()
 
     std::cout << "Exit main loop\n";
 
-    model3D.CleanUp();
-
-    // terminate
-    GLWindow::GetInstance().Terminate();
-
     return 0;
 }

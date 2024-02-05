@@ -20,12 +20,6 @@ void Model::Draw(std::shared_ptr<Shader> shader)
         m_meshes[i].Draw(shader);
 }
 
-void Model::CleanUp() const
-{
-    for (size_t i = 0; i < m_meshes.size(); i++)
-        m_meshes[i].Delete();
-}
-
 void Model::loadModel(const std::string& path)
 {
     Assimp::Importer importer;

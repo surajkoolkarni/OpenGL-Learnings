@@ -1,4 +1,5 @@
 #include "VertexArray.h"
+#include "Error.h"
 
 #include <glad/glad.h>
 
@@ -6,6 +7,11 @@
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &VAO); 
+}
+
+VertexArray::~VertexArray()
+{
+    GLCall(glDeleteVertexArrays(1, &VAO));
 }
 
 void VertexArray::Bind() const
@@ -28,10 +34,6 @@ void VertexArray::DrawElements(unsigned int count)
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
 }
 
-void VertexArray::Delete() const
-{
-    glDeleteVertexArrays(1, &VAO);
-}
 
 void VertexArray::SetVertexAttributes(int idx, unsigned int size, unsigned int stride, unsigned int offset)
 {

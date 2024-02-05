@@ -61,13 +61,6 @@ void Mesh::Draw(std::shared_ptr<Shader> shader) const
     Texture2D::DeActivate();
 }
 
-void Mesh::Delete() const
-{
-    m_EBO->Delete();
-    m_VBO->Delete();
-    m_VAO->Delete();
-}
-
 void Mesh::setupMesh()
 {
     m_VAO = std::make_unique<VertexArray>();        

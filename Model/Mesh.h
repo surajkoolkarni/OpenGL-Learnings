@@ -28,8 +28,6 @@ public:
 
     void Draw(std::shared_ptr<Shader> shader) const;
 
-    void Delete() const;
-
 private:
     void setupMesh();
 

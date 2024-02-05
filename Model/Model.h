@@ -20,8 +20,6 @@ public:
 
     void Draw(std::shared_ptr<Shader> shader);
 
-    void CleanUp() const;
-
 private:
     void loadModel(const std::string& path);
 
