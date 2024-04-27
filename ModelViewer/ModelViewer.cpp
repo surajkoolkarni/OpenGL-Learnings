@@ -39,10 +39,10 @@ int main()
 
     std::cout << "Compiling shaders\n";
 
-    std::shared_ptr<Shader> shader = std::make_shared<Shader>("1.model_loading.vs", "1.model_loading.fs");
+    std::shared_ptr<Shader> shader = std::make_shared<Shader>("resources/1.model_loading.vs", "resources/1.model_loading.fs");
     shader->use();
 
-    Model model3D("backpack.obj");
+    Model model3D("resources/backpack.obj");
 
     GLWindow::GetInstance().ProcessMouseInput();
     GLWindow::GetInstance().ProcessMouseScroll();

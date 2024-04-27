@@ -1,6 +1,14 @@
-SRC=./src
-INCLUDE=-I./include
+MODEL=./Model
+MODEL_VIEWER=./ModelViewer
+STB_IMAGE=./stb_image
+GLAD=./glad
+
+INCLUDE= -I$(STB_IMAGE) -I$(GLAD) -I$(MODEL)
+
 OPT=-O2
+
+ModelViewer:stb_image glad lib
+	g++ $(MODEL_VIEWER)/ModelViewer.cpp -fPIC $(OPT) $(INCLUDE) -L./ -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -lModel -o viewer
 
 Lesson1:lib
 	g++ Lesson1.cpp -fPIC $(OPT) $(INCLUDE) -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lModel -o lesson1
@@ -50,54 +58,54 @@ Lesson14:
 Lesson15:libModel.so
 	g++ Lesson15.cpp -fPIC $(OPT) $(INCLUDE) -L./ -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lModel -o lesson15
 
-Lesson16:libModel.so
-	g++ Lesson16.cpp -fPIC $(OPT) $(INCLUDE) -L./ -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -lModel -o lesson16
+lib:stb gladLib BufferFactory Camera ElementBuffer GLWindow IBuffer Mesh model Shader Texture2D Vertex VertexArray VertexBuffer Error
+	g++ -shared -fPIC $(OPT) BufferFactory.o Camera.o ElementBuffer.o GLWindow.o IBuffer.o Mesh.o Error.o \
+	 	Model.o Shader.o Texture2D.o Vertex.o VertexArray.o VertexBuffer.o -L. -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -o libModel.so
 
-stb_image:
-	g++ -shared -fPIC $(OPT) stb_image.cpp $(OPT) $(INCLUDE) -o libstb_image.so 
+stb:
+	g++ -shared -fPIC $(OPT) $(INCLUDE) $(STB_IMAGE)/stb_image.cpp $(OPT) $(INCLUDE) -o libstb_image.so 
 
-lib:BufferFactory Camera ElementBuffer GLWindow IBuffer Mesh Model Shader StbImage Texture2D Vertex VertexArray VertexBuffer
-	g++ -shared -fPIC $(OPT) BufferFactory.o Camera.o ElementBuffer.o GLWindow.o IBuffer.o Mesh.o \
-	 	Model.o Shader.o StbImage.o Texture2D.o Vertex.o VertexArray.o VertexBuffer.o -L. -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lglad -lstb_image -lassimp -o libModel.so
+gladLib:
+	gcc -shared -fPIC $(OPT) $(INCLUDE) $(GLAD)/glad.c -o libglad.so
 
-BufferFactory:$(SRC)/BufferFactory.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/BufferFactory.cpp
+BufferFactory:$(MODEL)/BufferFactory.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/BufferFactory.cpp
 
-Camera:$(SRC)/Camera.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Camera.cpp
+Camera:$(MODEL)/Camera.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Camera.cpp
 
-ElementBuffer:$(SRC)/ElementBuffer.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/ElementBuffer.cpp
+ElementBuffer:$(MODEL)/ElementBuffer.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/ElementBuffer.cpp
 
-GLWindow:$(SRC)/GLWindow.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/GLWindow.cpp
+GLWindow:$(MODEL)/GLWindow.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/GLWindow.cpp
 
-IBuffer:$(SRC)/IBuffer.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/IBuffer.cpp
+IBuffer:$(MODEL)/IBuffer.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/IBuffer.cpp
 
-Mesh:$(SRC)/Mesh.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Mesh.cpp
+Mesh:$(MODEL)/Mesh.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Mesh.cpp
 
-Model:$(SRC)/Model.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Model.cpp
+model:$(MODEL)/Model.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Model.cpp
 
-Shader:$(SRC)/Shader.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Shader.cpp
+Shader:$(MODEL)/Shader.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Shader.cpp
 
-StbImage:$(SRC)/StbImage.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/StbImage.cpp
+Texture2D:$(MODEL)/Texture2D.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Texture2D.cpp
 
-Texture2D:$(SRC)/Texture2D.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Texture2D.cpp
+Vertex:$(MODEL)/Vertex.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Vertex.cpp
 
-Vertex:$(SRC)/Vertex.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/Vertex.cpp
+VertexArray:$(MODEL)/VertexArray.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/VertexArray.cpp
 
-VertexArray:$(SRC)/VertexArray.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/VertexArray.cpp
+VertexBuffer:$(MODEL)/VertexBuffer.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/VertexBuffer.cpp
 
-VertexBuffer:$(SRC)/VertexBuffer.cpp
-	g++ -c -fPIC $(OPT) $(INCLUDE) $(SRC)/VertexBuffer.cpp
+Error:$(MODEL)/Error.cpp
+	g++ -c -fPIC $(OPT) $(INCLUDE) $(MODEL)/Error.cpp
 
 clean:
 	rm -f lesson* *.o libModel.so
