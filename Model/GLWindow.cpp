@@ -131,13 +131,13 @@ int GLWindow::ShouldWindowClose() const
 
 void GLWindow::SetBackgroundColor(float r, float g, float b, float a) const
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glClearColor(r, g, b, a);
 }
 
 void GLWindow::EnableDepthTest()
 {
     glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void GLWindow::EnableWireFrame()
@@ -158,6 +158,31 @@ int GLWindow::Width() const
 float GLWindow::AspectRatio() const
 {
     return float(m_width) / m_height;;
+}
+
+void GLWindow::StencilAllowEachFrag()
+{
+    //glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+    glStencilMask(0xff);
+    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+}
+
+void GLWindow::StencilAllowBorderFrag()
+{
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00); // disable writing to the stencil buffer
+    glDisable(GL_DEPTH_TEST);
+}
+
+void GLWindow::SetDefault()
+{
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 }
 
 GLWindow::GLWindow()

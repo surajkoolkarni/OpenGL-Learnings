@@ -37,10 +37,15 @@ int main()
         return -1;
     }
 
+    GLWindow::GetInstance().SetDefault();
+
     std::cout << "Compiling shaders\n";
 
     std::shared_ptr<Shader> shader = std::make_shared<Shader>("1.model_loading.vs", "1.model_loading.fs");
     shader->use();
+
+    std::shared_ptr<Shader> borderShader = std::make_shared<Shader>("Outlining.vs", "Outlining.fs");
+    borderShader->use();
 
     Model model3D("backpack.obj");
 
@@ -52,7 +57,7 @@ int main()
     {
         GLWindow::GetInstance().ProcessKeyboardInput();
         
-        GLWindow::GetInstance().SetBackgroundColor(0.05f, 0.05f, 0.05f, 1.0f);
+        GLWindow::GetInstance().SetBackgroundColor(1.0f, 1.0f, 1.0f, 1.0f);
         GLWindow::GetInstance().EnableDepthTest();
 
         // camera
@@ -98,7 +103,22 @@ int main()
         shader->setMat4("view", view);
         shader->setMat4("projection", projection);
 
+        glm::mat4 modelBorder(1.0);
+        modelBorder = glm::scale(modelBorder, glm::vec3(1.1, 1.1, 1.1));
+
+        borderShader->setMat4("modelMat", modelBorder);
+        borderShader->setMat4("viewMat", view);
+        borderShader->setMat4("projMat", projection);
+        
+        GLWindow::GetInstance().StencilAllowEachFrag();
+
+        // first allow every frag to be shaded
         model3D.Draw(shader);
+
+        GLWindow::GetInstance().StencilAllowBorderFrag();
+
+        // now draw scaled up object but only if stencil buffer is not 1 (is 0)
+        model3D.Draw(borderShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

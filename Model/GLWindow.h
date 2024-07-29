@@ -47,6 +47,11 @@ public:
 
     void EnableWireFrame();
 
+    void StencilAllowEachFrag();
+
+    void StencilAllowBorderFrag();
+
+    void SetDefault();
 
     int Height() const;
 
