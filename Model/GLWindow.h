@@ -45,6 +45,8 @@ public:
 
     void EnableDepthTest();
 
+    void EnableBackFaceCulling();
+
     void EnableWireFrame();
 
     void StencilAllowEachFrag();

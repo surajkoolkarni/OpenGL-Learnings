@@ -42,10 +42,7 @@ int main()
     std::cout << "Compiling shaders\n";
 
     std::shared_ptr<Shader> shader = std::make_shared<Shader>("1.model_loading.vs", "1.model_loading.fs");
-    shader->use();
-
-    std::shared_ptr<Shader> borderShader = std::make_shared<Shader>("Outlining.vs", "Outlining.fs");
-    borderShader->use();
+    std::shared_ptr<Shader> borderShader = std::make_shared<Shader>("1.model_loading.vs", "Outlining.fs");
 
     Model model3D("backpack.obj");
 
@@ -103,18 +100,20 @@ int main()
         shader->setMat4("view", view);
         shader->setMat4("projection", projection);
 
-        glm::mat4 modelBorder(1.0);
-        modelBorder = glm::scale(modelBorder, glm::vec3(1.1, 1.1, 1.1));
+        GLWindow::GetInstance().EnableBackFaceCulling();
 
-        borderShader->setMat4("modelMat", modelBorder);
-        borderShader->setMat4("viewMat", view);
-        borderShader->setMat4("projMat", projection);
-        
         GLWindow::GetInstance().StencilAllowEachFrag();
 
-        // first allow every frag to be shaded
         model3D.Draw(shader);
 
+        glm::mat4 modelBorder(1.0);
+        modelBorder = glm::scale(modelBorder, glm::vec3(1.05, 1.05, 1.05));
+
+        borderShader->use();
+        borderShader->setMat4("model", modelBorder);
+        borderShader->setMat4("view", view);
+        borderShader->setMat4("projection", projection);
+        
         GLWindow::GetInstance().StencilAllowBorderFrag();
 
         // now draw scaled up object but only if stencil buffer is not 1 (is 0)

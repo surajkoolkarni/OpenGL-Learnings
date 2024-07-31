@@ -140,6 +140,13 @@ void GLWindow::EnableDepthTest()
     glEnable(GL_DEPTH_TEST);
 }
 
+void GLWindow::EnableBackFaceCulling()
+{
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+}
+
 void GLWindow::EnableWireFrame()
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
