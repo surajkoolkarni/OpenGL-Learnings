@@ -11,7 +11,7 @@
 class Texture2D
 {
 public:
-    Texture2D() = default;
+    Texture2D();
 
     Texture2D(const std::string& fileName, const std::string& type = "");
 

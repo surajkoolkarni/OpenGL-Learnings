@@ -61,6 +61,8 @@ public:
 
     float AspectRatio() const;
 
+    GLFWwindow* Window();
+
 private:
     GLWindow();
 

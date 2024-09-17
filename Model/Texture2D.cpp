@@ -1,9 +1,22 @@
 #include "Texture2D.h"
+#include "GLWindow.h"
 
 #include "stb_image.h"
 
 #include <iostream>
 
+
+Texture2D::Texture2D()
+{
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GLWindow::GetInstance().Width(), GLWindow::GetInstance().Height(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    ID = texture;
+}
 
 Texture2D::Texture2D(const std::string& fileName, const std::string& type) :
     m_path(fileName),

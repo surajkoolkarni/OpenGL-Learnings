@@ -36,6 +36,9 @@ void Mesh::Draw(std::shared_ptr<Shader> shader) const
 
         Texture2D::Enable();
 
+        // m_FBO->Bind();
+        // m_FBO->AttachTexture(m_textures[i].ID);
+
         std::string number;
         std::string name = m_textures[i].Type();
 
@@ -63,7 +66,7 @@ void Mesh::Draw(std::shared_ptr<Shader> shader) const
 
 void Mesh::setupMesh()
 {
-    m_VAO = std::make_unique<VertexArray>();        
+    m_VAO = std::make_unique<VertexArray>();
     m_VBO = std::dynamic_pointer_cast<VertexBuffer>(BufferFactory::CreateBuffer("Vertex"));
     m_EBO = std::dynamic_pointer_cast<ElementBuffer>(BufferFactory::CreateBuffer("Element"));
 
@@ -74,6 +77,17 @@ void Mesh::setupMesh()
     setAttributes();
 
     m_VAO->UnBind();
+
+    // m_FBO = std::make_shared<FrameBuffer>();
+    // m_RBO = std::make_shared<RenderBuffer>();
+
+    // m_frameBufferTexture = std::make_shared<Texture2D>();
+
+    // m_FBO->AttachTexture(m_frameBufferTexture->ID);
+    // m_FBO->AttachRenderBuffer(m_RBO->ID);
+
+    // m_RBO->UnBind();
+    // m_FBO->UnBind();
 }
 
 void Mesh::setAttributes()

@@ -167,6 +167,11 @@ float GLWindow::AspectRatio() const
     return float(m_width) / m_height;;
 }
 
+GLFWwindow* GLWindow::Window()
+{
+    return m_window;
+}
+
 void GLWindow::StencilAllowEachFrag()
 {
     //glEnable(GL_DEPTH_TEST);
@@ -195,7 +200,7 @@ void GLWindow::SetDefault()
 GLWindow::GLWindow()
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }

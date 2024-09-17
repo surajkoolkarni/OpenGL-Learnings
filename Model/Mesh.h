@@ -12,6 +12,9 @@
 #include "VertexArray.h"
 #include "Shader.h"
 
+// #include "FrameBuffer.h"
+// #include "RenderBuffer.h"
+
 #include <vector>
 
 
@@ -47,4 +50,9 @@ private:
     std::unique_ptr<VertexArray> m_VAO;
     std::shared_ptr<VertexBuffer> m_VBO;
     std::shared_ptr<ElementBuffer> m_EBO;
+
+    // std::shared_ptr<FrameBuffer> m_FBO;
+    // std::shared_ptr<RenderBuffer> m_RBO;
+
+    // std::shared_ptr<Texture2D> m_frameBufferTexture;
 };

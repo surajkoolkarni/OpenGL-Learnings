@@ -133,10 +133,12 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ElementBuffer.cpp" />
     <ClCompile Include="Error.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="IBuffer.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="RenderBuffer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StbImage.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -150,10 +152,12 @@
     <ClInclude Include="DllExport.h" />
     <ClInclude Include="ElementBuffer.h" />
     <ClInclude Include="Error.h" />
+    <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="IBuffer.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="RenderBuffer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StbImage.h" />
     <ClInclude Include="Texture2D.h" />
