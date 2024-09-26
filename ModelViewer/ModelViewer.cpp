@@ -22,7 +22,7 @@ glm::vec3 pointLightPositions[] = {
 	glm::vec3( 2.3f, -3.3f, -4.0f),
 	glm::vec3(-4.0f,  2.0f, -12.0f),
 	glm::vec3( 0.0f,  0.0f, -3.0f)
-};  
+};
 
 int main()
 {
@@ -66,7 +66,7 @@ int main()
     // screenShader->use();
     // screenShader->setInt("screenTexture", 0);
 
-    Model model3D("backpack.obj");
+    std::unique_ptr<Model> model3D = std::make_unique<Model>("backpack.obj");
 
     //GLWindow::GetInstance().ProcessMouseInput();
     //GLWindow::GetInstance().ProcessMouseScroll();
@@ -104,6 +104,8 @@ int main()
         glm::mat4 model = glm::translate(glm::mat4(1.f), glm::vec3{ translationVec, 0.f });
         model = glm::rotate(model, angle, rotationAxis);
 
+        glm::mat4 anotherModel = glm::translate(glm::mat4(1.f), glm::vec3(5.f, 5.f, 0.f));
+        
         shader->use();
         shader->setVec3("viewPos", GLWindow::GetInstance().GetCamera()->Position);
         shader->setFloat("shininess", 32.0f);
@@ -143,14 +145,18 @@ int main()
 
         //GLWindow::GetInstance().StencilAllowEachFrag();
 
-        shader->use();
         //model3D.Draw(shader);
 
         // screenShader->use();
 
         ImGui::Render();
 
-        model3D.Draw(shader);
+        shader->use();
+        model3D->Draw(shader);
+
+        shader->setMat4("model", anotherModel);
+        shader->use();
+        model3D->Draw(shader);
 
         //glm::mat4 modelBorder(1.0);
         //modelBorder = glm::scale(modelBorder, glm::vec3(1.05, 1.05, 1.05));

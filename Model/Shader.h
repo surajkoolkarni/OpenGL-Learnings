@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include <string>
+#include <unordered_map>
 
 class MODEL_API Shader
 {
@@ -46,6 +47,10 @@ private:
     // ------------------------------------------------------------------------
     void checkCompileErrors(GLuint shader, const std::string& type, const std::string& shaderFile = "");
 
+    GLint getUniformLocation(const std::string& name) const;
+
 private:
     std::string m_vertexShaderPath, m_fragmentShaderPath;
+
+    mutable std::unordered_map<std::string, GLint> m_uniformLocationCache;
 };

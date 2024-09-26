@@ -12,16 +12,17 @@
 #include "VertexArray.h"
 #include "Shader.h"
 
-// #include "FrameBuffer.h"
-// #include "RenderBuffer.h"
-
 #include <vector>
+#include <cstdint>
+
+#include <assimp/mesh.h>
+#include <assimp/scene.h>
 
 
 class Mesh
 {
 public:
-    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture2D>& textures);
+    Mesh();
 
     Mesh(const Mesh&) = delete;
     Mesh(Mesh&&) = default;
@@ -29,30 +30,29 @@ public:
     Mesh& operator=(const Mesh& mesh) = delete;
     Mesh& operator=(Mesh&& mesh) = default;
 
-    void Draw(std::shared_ptr<Shader> shader) const;
+    void Draw(std::shared_ptr<Shader>& shader);
+
+    void AppendVertices(aiMesh* mesh);
+
+    void AppendIndices(aiMesh* mesh, uint32_t offset);
+
+    void AppendTextures(aiMesh* mesh, const aiScene* scene);
+
+    std::vector<Texture2D> loadMaterialTextures(aiMaterial* material, aiTextureType type, const std::string& typeName);
 
 private:
+    uint32_t LoadTexture(const std::string& path);
+
     void setupMesh();
 
-    void initVAO();
-
     void setAttributes();
-
-    void setupVBO();
-
-    void setupEBO();
 
 private:
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
-    std::vector<Texture2D> m_textures;
+    std::vector<Texture2D> m_textureCache;
 
     std::unique_ptr<VertexArray> m_VAO;
     std::shared_ptr<VertexBuffer> m_VBO;
     std::shared_ptr<ElementBuffer> m_EBO;
-
-    // std::shared_ptr<FrameBuffer> m_FBO;
-    // std::shared_ptr<RenderBuffer> m_RBO;
-
-    // std::shared_ptr<Texture2D> m_frameBufferTexture;
 };

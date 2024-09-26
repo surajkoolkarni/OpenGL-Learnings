@@ -5,10 +5,12 @@
 
 #include <vector>
 
-class ElementBuffer final : public IBuffer
+class MODEL_API ElementBuffer final : public IBuffer
 {
 public:
     ElementBuffer();
+
+    ~ElementBuffer() {}
 
     void Copy(const void* buf, unsigned int size) override;
 

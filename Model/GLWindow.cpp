@@ -1,4 +1,5 @@
 #include "GLWindow.h"
+#include "Error.h"
 
 #include "stb_image.h"
 
@@ -138,6 +139,9 @@ void GLWindow::SetBackgroundColor(float r, float g, float b, float a) const
 void GLWindow::EnableDepthTest()
 {
     glEnable(GL_DEPTH_TEST);
+
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 }
 
 void GLWindow::EnableBackFaceCulling()
