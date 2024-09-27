@@ -32,6 +32,8 @@ public:
 
     void Draw(std::shared_ptr<Shader>& shader);
 
+    void CopyData() const;
+
     void AppendVertices(aiMesh* mesh);
 
     void AppendIndices(aiMesh* mesh, uint32_t offset);
@@ -43,9 +45,7 @@ public:
 private:
     uint32_t LoadTexture(const std::string& path);
 
-    void setupMesh();
-
-    void setAttributes();
+    void setAttributes() const;
 
 private:
     std::vector<Vertex> m_vertices;
@@ -55,4 +55,6 @@ private:
     std::unique_ptr<VertexArray> m_VAO;
     std::shared_ptr<VertexBuffer> m_VBO;
     std::shared_ptr<ElementBuffer> m_EBO;
+
+    bool m_isSet = false;
 };

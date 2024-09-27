@@ -34,7 +34,6 @@ void VertexArray::DrawElements(unsigned int count)
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
 }
 
-
 void VertexArray::SetVertexAttributes(int idx, unsigned int size, unsigned int stride, unsigned int offset)
 {
     glVertexAttribPointer(idx, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset * sizeof(float)));

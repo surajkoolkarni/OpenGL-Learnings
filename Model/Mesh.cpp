@@ -17,12 +17,13 @@
 
 Mesh::Mesh()
 {
+    m_VAO = std::make_unique<VertexArray>();
+    m_VBO = std::dynamic_pointer_cast<VertexBuffer>(BufferFactory::CreateBuffer("Vertex"));
+    m_EBO = std::dynamic_pointer_cast<ElementBuffer>(BufferFactory::CreateBuffer("Element"));
 }
 
 void Mesh::Draw(std::shared_ptr<Shader>& shader)
 {
-    setupMesh();
-
     unsigned int diffuseIdx = 1;
     unsigned int specularIdx = 1;
     unsigned int normalIdx = 1;
@@ -59,6 +60,17 @@ void Mesh::Draw(std::shared_ptr<Shader>& shader)
 
     Texture2D::UnBind();
     Texture2D::DeActivate();
+}
+
+void Mesh::CopyData() const
+{
+    m_VAO->Bind();
+    m_VBO->CopyVertices(m_vertices);
+    m_EBO->CopyIndices(m_indices);
+
+    setAttributes();
+
+    m_VAO->UnBind();
 }
 
 void Mesh::AppendVertices(aiMesh* mesh)
@@ -181,22 +193,7 @@ std::vector<Texture2D> Mesh::loadMaterialTextures(aiMaterial* material, aiTextur
     return textures;
 }
 
-void Mesh::setupMesh()
-{
-    m_VAO = std::make_unique<VertexArray>();
-    m_VBO = std::dynamic_pointer_cast<VertexBuffer>(BufferFactory::CreateBuffer("Vertex"));
-    m_EBO = std::dynamic_pointer_cast<ElementBuffer>(BufferFactory::CreateBuffer("Element"));
-
-    m_VAO->Bind();
-    m_VBO->CopyVertices(m_vertices);
-    m_EBO->CopyIndices(m_indices);
-
-    setAttributes();
-
-    m_VAO->UnBind();
-}
-
-void Mesh::setAttributes()
+void Mesh::setAttributes() const
 {
     glEnableVertexAttribArray(0);	
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
