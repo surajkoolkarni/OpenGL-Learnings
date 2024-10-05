@@ -19,6 +19,37 @@
 #include <assimp/scene.h>
 
 
+struct BBox
+{
+    glm::vec3 max;
+    glm::vec3 min;
+
+    float Width() const
+    {
+        return max.x - min.x;
+    }
+
+    float Height() const
+    {
+        return max.y - min.y;
+    }
+
+    float Depth() const
+    {
+        return max.z - min.z;
+    }
+
+    float MaxExtent() const
+    {
+        return glm::max(Width(), glm::max(Height(), Depth()));
+    }
+
+    float BoundingRadius() const
+    {
+        return 0.5 * glm::distance(max, min);
+    }
+};
+
 class Mesh
 {
 public:
@@ -42,6 +73,10 @@ public:
 
     std::vector<Texture2D> loadMaterialTextures(aiMaterial* material, aiTextureType type, const std::string& typeName);
 
+    void SetBoundingBox(const aiAABB& bbox);
+
+    std::shared_ptr<BBox> BoundingBox() const;
+
 private:
     uint32_t LoadTexture(const std::string& path);
 
@@ -56,5 +91,5 @@ private:
     std::shared_ptr<VertexBuffer> m_VBO;
     std::shared_ptr<ElementBuffer> m_EBO;
 
-    bool m_isSet = false;
+    std::shared_ptr<BBox> m_bbox;
 };

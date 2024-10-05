@@ -40,10 +40,8 @@ int main()
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
 
-    GLWindow::GetInstance().CreateWindow(width, height, "LearnOpenGL");
-    GLWindow::GetInstance().SetCamera(1.16f, 1.44f, 4.41f);
+    GLWindow::GetInstance().CreateWindow(width, height, "ModelViewer");
 
     ImGui_ImplGlfw_InitForOpenGL(GLWindow::GetInstance().Window(), true);
 
@@ -56,27 +54,37 @@ int main()
         return -1;
     }
 
-    //GLWindow::GetInstance().SetDefault();
-
     std::cout << "Compiling shaders\n";
 
-    std::shared_ptr<Shader> shader = std::make_shared<Shader>("1.model_loading.vs", "1.model_loading.fs");
-    //std::shared_ptr<Shader> borderShader = std::make_shared<Shader>("1.model_loading.vs", "Outlining.fs");
-    // std::shared_ptr<Shader> screenShader = std::make_shared<Shader>("frameBuffer.vs", "frameBuffer.fs");
-    // screenShader->use();
-    // screenShader->setInt("screenTexture", 0);
+    std::shared_ptr<Shader> shader = std::make_shared<Shader>("Lesson16SmoothEdge.vs.glsl", "Lesson16SmoothEdge.fs.glsl");
+
+    std::cout << "Loading model\n";
 
     std::unique_ptr<Model> model3D = std::make_unique<Model>("backpack.obj");
 
-    //GLWindow::GetInstance().ProcessMouseInput();
-    //GLWindow::GetInstance().ProcessMouseScroll();
+    std::cout << model3D->BoundingBox()->max.x <<  ", " << model3D->BoundingBox()->max.y << ", " << model3D->BoundingBox()->max.z << std::endl;
+    std::cout << model3D->BoundingBox()->min.x <<  ", " << model3D->BoundingBox()->min.y << ", " << model3D->BoundingBox()->min.z << std::endl;
 
     std::cout << "Main loop\n";
 
     glm::vec2 translationVec(0.f, 0.f);
-    float zoom = tan(glm::radians(70.f));
     glm::vec3 rotationAxis(0.f, 1.f, 0.f);
     float angle = 0.f;
+
+    model3D->AttachCamera("camera1", std::make_shared<Camera>());
+
+    std::shared_ptr<Camera> camera = model3D->ToggleCamera("camera1");
+    
+    std::cout << "Position:" << camera->Position.x << ", " << camera->Position.y << ", " << camera->Position.z << std::endl;
+    std::cout << "Front:" << camera->Front.x << ", " << camera->Front.y << ", " << camera->Front.z << std::endl;
+    std::cout << "Up:" << camera->Up.x << ", " << camera->Up.y << ", " << camera->Up.z << std::endl;
+    std::cout << "FocalPoint:" << camera->FocalPoint.x << ", " << camera->FocalPoint.y << ", " << camera->FocalPoint.z << std::endl;
+
+    camera->NearPlane = 194.9658193607427;
+    camera->FarPlane = 404.90612273288286;
+
+    std::cout << "NearPlane:" << camera->NearPlane << std::endl;
+    std::cout << "FarPlane:" << camera->FarPlane << std::endl;
 
     while (!GLWindow::GetInstance().ShouldWindowClose())
     {
@@ -84,11 +92,19 @@ int main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Manipulate the model");                          // Create a window called "Hello, world!" and append into it.
-        ImGui::SliderFloat2("Pan", &translationVec[0], -5.0f, 5.f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::SliderFloat("Zoom fov", &zoom, 0.f, 500.f);
+        ImGui::Begin("Manipulate the model");
+        ImGui::SliderFloat2("Pan", &translationVec[0], -5.0f, 5.f); 
+        ImGui::SliderFloat("Zoom fov", &camera->Zoom, 0.f, 500.f);
         ImGui::InputFloat3("axis of rotation", &rotationAxis[0]);
         ImGui::SliderAngle("angle of rotation", &angle);
+
+        ImGui::SliderFloat3("Camera Front", &camera->Front[0], -10, 10);
+        ImGui::SliderFloat3("Camera Pos", &camera->Position[0], -10, 10);
+        ImGui::SliderFloat3("Camera Up", &camera->Up[0], -1, 1);
+
+        ImGui::SliderFloat("Near Plane", &camera->NearPlane, 0.1, 10000);
+        ImGui::SliderFloat("Far Plane", &camera->FarPlane, 10, 10000);
+
         ImGui::End();
 
         GLWindow::GetInstance().ProcessKeyboardInput();
@@ -96,21 +112,16 @@ int main()
         GLWindow::GetInstance().SetBackgroundColor(0.5f, 0.5f, 0.5f, 1.0f);
         GLWindow::GetInstance().EnableDepthTest();
 
-        // camera
-        glm::mat4 view = GLWindow::GetInstance().GetCamera()->GetViewMatrix();
-
-        glm::mat4 projection = glm::perspective(glm::radians(zoom), GLWindow::GetInstance().AspectRatio(), 0.1f, 100.0f);
-
-        glm::mat4 model = glm::translate(glm::mat4(1.f), glm::vec3{ translationVec, 0.f });
+        glm::mat4 view = camera->GetViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), GLWindow::GetInstance().AspectRatio(), camera->NearPlane, camera->FarPlane);
+        glm::mat4 model = glm::translate(glm::mat4(1.f), glm::vec3(translationVec, 0.f));
         model = glm::rotate(model, angle, rotationAxis);
-
-        glm::mat4 anotherModel = glm::translate(glm::mat4(1.f), glm::vec3(5.f, 5.f, 0.f));
         
         shader->use();
-        shader->setVec3("viewPos", GLWindow::GetInstance().GetCamera()->Position);
+        shader->setVec3("viewPos", camera->Position);
         shader->setFloat("shininess", 32.0f);
 
-        shader->setVec3("directionalLight.direction", GLWindow::GetInstance().GetCamera()->Front);
+        shader->setVec3("directionalLight.direction", camera->Front);
         shader->setVec3("directionalLight.ambient", 0.2, 0.2, 0.2);
         shader->setVec3("directionalLight.diffuse", 0.5, 0.5, 0.5);
         shader->setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
@@ -132,8 +143,8 @@ int main()
         shader->setVec3("spotLight.diffuse", 0.5, 0.5, 0.5);
         shader->setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
         
-        shader->setVec3("spotLight.direction", GLWindow::GetInstance().GetCamera()->Front);
-        shader->setVec3("spotLight.position", GLWindow::GetInstance().GetCamera()->Position);
+        shader->setVec3("spotLight.direction", camera->Front);
+        shader->setVec3("spotLight.position", camera->Position);
         shader->setFloat("spotLight.cutoff", glm::cos(glm::radians(12.5f)));
         shader->setFloat("spotLight.outerCutoff", glm::cos(glm::radians(17.5f)));
 
@@ -141,38 +152,11 @@ int main()
         shader->setMat4("view", view);
         shader->setMat4("projection", projection);
 
-        //GLWindow::GetInstance().EnableBackFaceCulling();
-
-        //GLWindow::GetInstance().StencilAllowEachFrag();
-
-        //model3D.Draw(shader);
-
-        // screenShader->use();
-
         ImGui::Render();
 
         shader->use();
         model3D->Draw(shader);
 
-        shader->setMat4("model", anotherModel);
-        shader->use();
-        model3D->Draw(shader);
-
-        //glm::mat4 modelBorder(1.0);
-        //modelBorder = glm::scale(modelBorder, glm::vec3(1.05, 1.05, 1.05));
-
-        //borderShader->use();
-        //borderShader->setMat4("model", modelBorder);
-        //borderShader->setMat4("view", view);
-        //borderShader->setMat4("projection", projection);
-        //
-        //GLWindow::GetInstance().StencilAllowBorderFrag();
-
-        // now draw scaled up object but only if stencil buffer is not 1 (is 0)
-        //model3D.Draw(borderShader);
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         GLWindow::GetInstance().SwapBuffers();

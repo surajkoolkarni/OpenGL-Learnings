@@ -25,6 +25,8 @@ public:
 
     void CreateWindow(int width, int height, const std::string& title);
 
+    void InitCamera();
+
     void SetCamera(float x, float y, float z);
 
     std::shared_ptr<Camera> GetCamera();

@@ -3,6 +3,8 @@
 
 #include "stb_image.h"
 
+#include <glad/glad.h>
+
 #include <iostream>
 
 
@@ -99,7 +101,7 @@ void Texture2D::BindImage(unsigned int& textureID)
         SetParameterInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
         SetParameterInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         SetParameterInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
+        SetParameterInt(GL_TEXTURE_MAX_ANISOTROPY, 8);
         stbi_image_free(data);
     }
     else

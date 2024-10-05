@@ -20,6 +20,10 @@ Mesh::Mesh()
     m_VAO = std::make_unique<VertexArray>();
     m_VBO = std::dynamic_pointer_cast<VertexBuffer>(BufferFactory::CreateBuffer("Vertex"));
     m_EBO = std::dynamic_pointer_cast<ElementBuffer>(BufferFactory::CreateBuffer("Element"));
+
+    m_bbox = std::make_shared<BBox>();
+    m_bbox->max = glm::vec3(std::numeric_limits<float>().min());
+    m_bbox->min = glm::vec3(std::numeric_limits<float>().max());
 }
 
 void Mesh::Draw(std::shared_ptr<Shader>& shader)
@@ -49,7 +53,7 @@ void Mesh::Draw(std::shared_ptr<Shader>& shader)
          else if(name == "texture_height")
             number = std::to_string(heightIdx++);
  
-        shader->setInt(name + number, i);
+        shader->setInt(name + "[" + number + "]", i);
 
         Texture2D::Disable();
     }
@@ -88,6 +92,8 @@ void Mesh::AppendVertices(aiMesh* mesh)
         else
             vertex.TexCoords = glm::vec2(0.0, 0.0);
 
+        vertex.TextureID = mesh->mMaterialIndex;
+
         m_vertices.push_back(std::move(vertex));
     }
 }
@@ -99,7 +105,7 @@ void Mesh::AppendIndices(aiMesh* mesh, uint32_t offset)
         aiFace face = mesh->mFaces[i];
 
         for (size_t j = 0; j < face.mNumIndices; j++)
-            m_indices.push_back(face.mIndices[j] + offset);            
+            m_indices.push_back(face.mIndices[j] + offset);     
     }
 }
 
@@ -193,26 +199,43 @@ std::vector<Texture2D> Mesh::loadMaterialTextures(aiMaterial* material, aiTextur
     return textures;
 }
 
+void Mesh::SetBoundingBox(const aiAABB& bbox)
+{
+    aiVector3D bboxMax = bbox.mMax;
+    aiVector3D bboxMin = bbox.mMin;
+
+    m_bbox->max = glm::max(glm::vec3(bboxMax.x, bboxMax.y, bboxMax.z), m_bbox->max);
+    m_bbox->min = glm::min(glm::vec3(bboxMin.x, bboxMin.y, bboxMin.z), m_bbox->min);
+}
+
+std::shared_ptr<BBox> Mesh::BoundingBox() const
+{
+    return m_bbox;
+}
+
 void Mesh::setAttributes() const
 {
     glEnableVertexAttribArray(0);	
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Position));
     // vertex normals
     glEnableVertexAttribArray(1);	
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Normal));
     // vertex texture coords
     glEnableVertexAttribArray(2);	
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-    // vertex tangent
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, TexCoords));
+    // vertex texture ID
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
-    // vertex bitangent
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, TextureID));
+    // vertex tangent
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
-    // ids
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Tangent));
+    // vertex bitangent
     glEnableVertexAttribArray(5);
-    glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BoneIDs));
-    // weights
+    glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Bitangent));
+    // ids
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Weights));
+    glVertexAttribIPointer(6, 4, GL_INT, sizeof(Vertex), (const void*)offsetof(Vertex, BoneIDs));
+    // weights
+    glEnableVertexAttribArray(7);
+    glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Weights));
 }

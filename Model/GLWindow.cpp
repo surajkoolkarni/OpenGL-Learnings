@@ -88,6 +88,11 @@ void GLWindow::CreateWindow(int width, int height, const std::string& title)
     stbi_set_flip_vertically_on_load(true);
 }
 
+void GLWindow::InitCamera()
+{
+    m_camera = std::make_shared<Camera>();
+}
+
 void GLWindow::SetCamera(float x, float y, float z)
 {
     m_camera = std::make_shared<Camera>(glm::vec3(x, y, z));
@@ -132,8 +137,8 @@ int GLWindow::ShouldWindowClose() const
 
 void GLWindow::SetBackgroundColor(float r, float g, float b, float a) const
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(r, g, b, a);
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+    GLCall(glClearColor(r, g, b, a));
 }
 
 void GLWindow::EnableDepthTest()
@@ -146,9 +151,9 @@ void GLWindow::EnableDepthTest()
 
 void GLWindow::EnableBackFaceCulling()
 {
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
+    GLCall(glEnable(GL_CULL_FACE));
+    GLCall(glCullFace(GL_BACK));
+    GLCall(glFrontFace(GL_CW));
 }
 
 void GLWindow::EnableWireFrame()
@@ -163,12 +168,12 @@ int GLWindow::Height() const
 
 int GLWindow::Width() const
 {
-    return m_width;;
+    return m_width;
 }
 
 float GLWindow::AspectRatio() const
 {
-    return float(m_width) / m_height;;
+    return float(m_width) / m_height;
 }
 
 GLFWwindow* GLWindow::Window()
@@ -180,31 +185,34 @@ void GLWindow::StencilAllowEachFrag()
 {
     //glEnable(GL_DEPTH_TEST);
     //glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
-    glStencilMask(0xff);
+    GLCall(glStencilFunc(GL_ALWAYS, 1, 0xFF)); // all fragments should pass the stencil test
+    GLCall(glStencilMask(0xff));
     //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 }
 
 void GLWindow::StencilAllowBorderFrag()
 {
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00); // disable writing to the stencil buffer
-    glDisable(GL_DEPTH_TEST);
+    GLCall(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
+    GLCall(glStencilMask(0x00)); // disable writing to the stencil buffer
+    GLCall(glDisable(GL_DEPTH_TEST));
 }
 
 void GLWindow::SetDefault()
 {
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    GLCall(glEnable(GL_MULTISAMPLE));
+    GLCall(glEnable(GL_FRAMEBUFFER_SRGB));
+    GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glDepthFunc(GL_LESS));
+    GLCall(glEnable(GL_STENCIL_TEST));
+    GLCall(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
+    GLCall(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
 }
 
 GLWindow::GLWindow()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 32);
 }

@@ -33,8 +33,6 @@ public:
 
     static void Disable();
 
-    void SetParameterInt(GLenum name, GLint param);
-
     void Delete();
 
     std::string Type() const;
@@ -45,6 +43,8 @@ private:
     void BindImage(unsigned int& textureID);
 
     unsigned int LoadTexture();
+
+    void SetParameterInt(GLenum name, GLint param);
 
 public:
     std::string m_path;

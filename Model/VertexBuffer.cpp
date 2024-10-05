@@ -13,7 +13,8 @@ VertexBuffer::VertexBuffer() :
 void VertexBuffer::Copy(const void* buf, unsigned int size)
 {
     IBuffer::Bind();
-    glBufferData(m_target, size * sizeof(float), buf, GL_STATIC_DRAW);
+    glBufferData(m_target, size * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(m_target, size * sizeof(float), buf, GL_DYNAMIC_DRAW);
 }
 
 void VertexBuffer::CopyVertices(const std::vector<Vertex>& vertices)

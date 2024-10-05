@@ -1,4 +1,4 @@
-#version 330 core
+#version 460 core
 
 struct Material
 {
@@ -46,6 +46,7 @@ out vec4 FragColor;
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
+in float TextureID;
 
 uniform float shininess;
 
@@ -53,10 +54,10 @@ uniform SpotLight spotLight;
 uniform PointLight pointLights[4];
 uniform DirectionalLight directionalLight;
 
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
-// uniform sampler2D texture_normal1;
-// uniform sampler2D texture_height1;
+uniform sampler2D texture_diffuse[8];
+uniform sampler2D texture_specular[8];
+uniform sampler2D texture_normal[8];
+uniform sampler2D texture_height[8];
 
 uniform vec3 viewPos;
 
@@ -73,12 +74,14 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 result = CalcDirLight(directionalLight, norm, viewDir, texture_diffuse1, texture_specular1, shininess);
+    uint idx = uint(TextureID);
+
+    vec3 result = CalcDirLight(directionalLight, norm, viewDir, texture_diffuse[idx], texture_specular[idx], shininess);
 
     for (int i = 0; i < 4; ++i)
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, texture_diffuse1, texture_specular1, shininess);
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, texture_diffuse[idx], texture_specular[idx], shininess);
 
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir, texture_diffuse1, texture_specular1, shininess);
+    result += CalcSpotLight(spotLight, norm, FragPos, viewDir, texture_diffuse[idx], texture_specular[idx], shininess);
 
     FragColor = vec4(result, 1.0f);
 }
